@@ -1,55 +1,45 @@
-import java.util.ArrayList;
-import java.util.List;
+package ru.yandex.practicum.models;
 
-public class Epic extends Task {
+public class Task {
+    protected int id;
+    protected String title;
+    protected String description;
+    protected TaskStatus status;
 
-    public Epic(String title, String description) {
-        super(title, description, TaskStatus.NEW);
+    public Task(String title, String description, TaskStatus status) {
+        this.title = title;
+        this.description = description;
+        this.status = status;
     }
 
-    private List<Subtask> subtaskMap = new ArrayList<>();
-
-    public List<Subtask> getSubtaskList() {
-        return subtaskMap;
-    }
-
-
-    @Override
     public int getId() {
         return id;
     }
 
-    @Override
     public void setId(int id) {
         this.id = id;
     }
 
-    @Override
     public String getTitle() {
         return title;
     }
 
-    @Override
     public void setTitle(String title) {
         this.title = title;
     }
 
-    @Override
     public String getDescription() {
         return description;
     }
 
-    @Override
     public void setDescription(String description) {
         this.description = description;
     }
 
-    @Override
     public TaskStatus getStatus() {
         return status;
     }
 
-    @Override
     public void setStatus(TaskStatus status) {
         this.status = status;
     }
