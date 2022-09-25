@@ -29,5 +29,4 @@ public interface TaskManager {
     void addSubtask(Subtask subtask);
     void addEpic(Epic epic);
     void changeSubtaskStatus(Integer id, TaskStatus status);
-    List<Task> getHistory();
 }
