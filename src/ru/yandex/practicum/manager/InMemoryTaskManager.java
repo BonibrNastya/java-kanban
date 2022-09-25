@@ -4,6 +4,7 @@ import ru.yandex.practicum.models.Epic;
 import ru.yandex.practicum.models.Subtask;
 import ru.yandex.practicum.models.Task;
 import ru.yandex.practicum.models.TaskStatus;
+import ru.yandex.practicum.utils.Managers;
 
 import java.util.*;
 
@@ -27,28 +28,23 @@ public class InMemoryTaskManager implements TaskManager {
         this.idCounterSubtask = 1;
         this.getIdCounterEpic = 1;
     }
-    public HistoryManager getDefaultHistory(){
-        return getDefaultHistory();
-    }
+
 
     @Override
     public Task getTaskById(int id) {
-        HistoryManager taskHistory = new InMemoryHistoryManager();
-        taskHistory.add(taskMap.get(id));
+        Managers.getDefaultHistory().add(taskMap.get(id));
         return taskMap.get(id);
     }
 
     @Override
     public Subtask getSubtaskById(int id) {
-        HistoryManager subtaskHistory = new InMemoryHistoryManager();
-        subtaskHistory.add(subtaskMap.get(id));
+        Managers.getDefaultHistory().add(subtaskMap.get(id));
         return subtaskMap.get(id);
     }
 
     @Override
     public Epic getEpicById(int id) {
-        HistoryManager epicHistory = new InMemoryHistoryManager();
-        epicHistory.add(epicMap.get(id));
+        Managers.getDefaultHistory().add(epicMap.get(id));
         return epicMap.get(id);
     }
 
