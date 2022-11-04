@@ -1,10 +1,10 @@
 package ru.yandex.practicum.models;
 
 public class Node {
-    Task task;
+   private Task task;
 
-    Node next;
-    Node prev;
+    private Node next;
+    private Node prev;
 
     public Task getTask() {
         return task;
