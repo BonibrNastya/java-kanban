@@ -38,32 +38,32 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public Task getTaskById(int id) {
-        Task task = null;
-        if (taskMap.get(id) != null) {
-            historyManager.add(taskMap.get(id));
-            task = taskMap.get(id);
+        if (!taskMap.containsKey(id)){
+            System.out.println("Такого id нет");
+            return null;
         }
-        return task;
+        historyManager.add(taskMap.get(id));
+        return taskMap.get(id);
     }
 
     @Override
     public Subtask getSubtaskById(int id) {
-        Subtask subtask = null;
-        if (subtaskMap.get(id) != null) {
-            historyManager.add(subtaskMap.get(id));
-            subtask = subtaskMap.get(id);
+        if (!taskMap.containsKey(id)){
+            System.out.println("Такого id нет");
+            return null;
         }
-        return subtask;
+        historyManager.add(subtaskMap.get(id));
+        return subtaskMap.get(id);
     }
 
     @Override
     public Epic getEpicById(int id) {
-        Epic epic = null;
-        if (epicMap.get(id) != null) {
-            historyManager.add(epicMap.get(id));
-            epic = epicMap.get(id);
+        if (!taskMap.containsKey(id)){
+            System.out.println("Такого id нет");
+            return null;
         }
-        return epic;
+        historyManager.add(epicMap.get(id));
+        return epicMap.get(id);
     }
 
     @Override
