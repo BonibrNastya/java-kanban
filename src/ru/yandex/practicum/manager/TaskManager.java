@@ -5,6 +5,7 @@ import ru.yandex.practicum.models.Subtask;
 import ru.yandex.practicum.models.Task;
 import ru.yandex.practicum.models.TaskStatus;
 
+import java.io.IOException;
 import java.util.List;
 
 public interface TaskManager {
@@ -25,8 +26,8 @@ public interface TaskManager {
     void updateEpic(int id, Epic epic);
     void deleteEpicById(int id);
     List<Subtask> getAllSubtasksFromEpic(int id);
-    void addTask(Task task);
-    void addSubtask(Subtask subtask);
-    void addEpic(Epic epic);
+    void addTask(Task task) throws IOException;
+    void addSubtask(Subtask subtask) throws IOException;
+    void addEpic(Epic epic) throws IOException;
     void changeSubtaskStatus(Integer id, TaskStatus status);
 }

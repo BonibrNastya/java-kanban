@@ -9,10 +9,11 @@ public class InMemoryHistoryManager implements HistoryManager {
     private Node first = null;
     private Node last = null;
 
-    private final HashMap<Integer, Node> nodeHashMap = new HashMap<>();
+    protected final HashMap<Integer, Node> nodeHashMap = new HashMap<>();
 
     public InMemoryHistoryManager() {
     }
+
 
     @Override
     public void add(Task task) {

@@ -6,13 +6,14 @@ import ru.yandex.practicum.models.Task;
 import ru.yandex.practicum.models.TaskStatus;
 import ru.yandex.practicum.utils.Managers;
 
+import java.io.IOException;
 import java.util.*;
 
 public class InMemoryTaskManager implements TaskManager {
-    private final Map<Integer, Task> taskMap;
-    private final Map<Integer, Subtask> subtaskMap;
-    private final Map<Integer, Epic> epicMap;
-    private final HistoryManager historyManager = Managers.getDefaultHistory();
+    protected final Map<Integer, Task> taskMap;
+    protected final Map<Integer, Subtask> subtaskMap;
+    protected final Map<Integer, Epic> epicMap;
+    protected HistoryManager historyManager = Managers.getDefaultHistory();
 
 
     private int idCounterTask;
@@ -148,14 +149,14 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public void addTask(Task task) {
+    public void addTask(Task task) throws IOException {
         task.setId(idCounterTask);
         taskMap.put(idCounterTask, task);
         idCounterTask++;
     }
 
     @Override
-    public void addSubtask(Subtask subtask) {
+    public void addSubtask(Subtask subtask) throws IOException {
         subtask.setId(idCounterTask);
         subtaskMap.put(idCounterTask, subtask);
         idCounterTask++;
@@ -164,7 +165,7 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public void addEpic(Epic epic) {
+    public void addEpic(Epic epic) throws IOException {
         epic.setId(idCounterTask);
         epicMap.put(idCounterTask, epic);
         idCounterTask++;
