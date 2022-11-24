@@ -10,7 +10,7 @@ public class Task {
 
     @Override
     public String toString() {
-        return id + "," + TASK + "," + title + "," + status + "," + "Description " + description + ",";
+        return id + "," + TASK + "," + title + "," + status + "," + "Description " + description;
     }
 
     public Task(String title, String description, TaskStatus status) {

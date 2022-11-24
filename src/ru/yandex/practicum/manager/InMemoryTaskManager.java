@@ -49,7 +49,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public Subtask getSubtaskById(int id) {
-        if (!taskMap.containsKey(id)){
+        if (!subtaskMap.containsKey(id)){
             System.out.println("Такого id нет");
             return null;
         }
@@ -59,7 +59,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public Epic getEpicById(int id) {
-        if (!taskMap.containsKey(id)){
+        if (!epicMap.containsKey(id)){
             System.out.println("Такого id нет");
             return null;
         }

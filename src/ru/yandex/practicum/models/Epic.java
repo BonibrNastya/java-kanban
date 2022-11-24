@@ -6,7 +6,7 @@ import java.util.List;
 public class Epic extends Task {
     @Override
     public String toString() {
-        return id + "," + TaskType.EPIC + "," + title + "," + status + "," + "Description " + description + ",";
+        return id + "," + TaskType.EPIC + "," + title + "," + status + "," + "Description " + description;
     }
 
     private List<Subtask> subtaskMap = new ArrayList<>();

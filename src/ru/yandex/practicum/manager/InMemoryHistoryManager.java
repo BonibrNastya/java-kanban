@@ -80,7 +80,7 @@ public class InMemoryHistoryManager implements HistoryManager {
 
     public Node linkLast(Task task) {
         Node node = first;
-        while (first.getNext() != null) {
+        while (node.getNext() != null) {
             node = node.getNext();
         }
         node.setNext(new Node(task, null, node));
