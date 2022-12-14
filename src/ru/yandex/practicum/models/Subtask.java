@@ -1,5 +1,7 @@
 package ru.yandex.practicum.models;
 
+import java.util.Objects;
+
 public class Subtask extends Task {
     private int epicId;
 
@@ -14,6 +16,19 @@ public class Subtask extends Task {
 
     @Override
     public String toString() {
-        return id + "," + TaskType.SUBTASK + "," + title + "," + status + "," + "Description " + description + "," + epicId;
+        return id + "," + TaskType.SUBTASK + "," + title + "," + status + "," + description + "," + epicId;
+    }
+
+    @Override
+    public boolean equals(Object obj){
+        if (this == obj) return true;
+        if (obj == null) return false;
+        if (this.getClass() != obj.getClass()) return false;
+        Subtask otherSubtask = (Subtask) obj;
+        return Objects.equals(status, otherSubtask.status) &&
+                Objects.equals(title, otherSubtask.title) &&
+                Objects.equals(description, otherSubtask.description) &&
+                (id == otherSubtask.id) &&
+                (epicId == otherSubtask.epicId);
     }
 }

@@ -10,24 +10,44 @@ import java.util.List;
 
 public interface TaskManager {
 
+    void addTask(Task task);
+
+    void addSubtask(Subtask subtask);
+
+    void addEpic(Epic epic);
+
     List<Task> getTaskList();
-    void clearTasks();
-    Task getTaskById(int id);
-    void updateTask(Task task);
-    void deleteTaskById(int id);
-    List<Subtask> getSubtaskList();
-    void clearSubtasks();
-    Subtask getSubtaskById(int id);
-    void updateSubtask(Subtask subtask);
-    void deleteSubtaskById(int id);
+
     List<Epic> getEpicList();
-    void clearEpics();
+
+    List<Subtask> getSubtaskList();
+
+    Task getTaskById(int id);
+
     Epic getEpicById(int id);
+
+    Subtask getSubtaskById(int id);
+
+    void updateTask(int id, Task task);
+
     void updateEpic(int id, Epic epic);
+
+    void updateSubtask(int id, Subtask subtask);
+
+    void clearTasks();
+
+    void clearEpics();
+
+    void clearSubtasks();
+
+    void deleteTaskById(int id);
+
     void deleteEpicById(int id);
-    List<Subtask> getAllSubtasksFromEpic(int id);
-    void addTask(Task task) throws IOException;
-    void addSubtask(Subtask subtask) throws IOException;
-    void addEpic(Epic epic) throws IOException;
+
+    void deleteSubtaskById(int id);
+
     void changeSubtaskStatus(Integer id, TaskStatus status);
+
+    List<Subtask> getAllSubtasksFromEpic(int id);
+
 }

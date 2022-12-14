@@ -6,8 +6,8 @@ import ru.yandex.practicum.models.Task;
 import java.util.*;
 
 public class InMemoryHistoryManager implements HistoryManager {
-    private Node first = null;
-    private Node last = null;
+    private Node<Task> first;
+    private Node<Task> last;
 
     protected final HashMap<Integer, Node> nodeHashMap = new HashMap<>();
 
@@ -17,35 +17,36 @@ public class InMemoryHistoryManager implements HistoryManager {
 
     @Override
     public void add(Task task) {
-        if (task == null){
+        if (task == null) {
             return;
         }
 
         if (nodeHashMap.containsKey(task.getId())) {
             Node temp = nodeHashMap.get(task.getId());
             removeNode(temp);
-            Node node = linkLast(task);
-            nodeHashMap.put(task.getId(), node);
-        }
-        Node node = first;
-        if (node == null) {
-            first = new Node(task, null, null);
-            node = first;
+            linkLast(task);
         } else {
-            node = linkLast(task);
+            if (first == null) {
+                Node<Task> newNode = new Node<>(null, task, null);
+                first = newNode;
+                last = newNode;
+            } else {
+                linkLast(task);
+            }
+
+            if (getTasks().size() > 10) {
+                nodeHashMap.remove(first.getTask().getId());
+                first.getNext();
+            }
         }
-        if (getTasks().size() > 10) {
-            nodeHashMap.remove(first.getTask().getId());
-            first = first.getNext();
-        }
-        nodeHashMap.put(task.getId(), node);
+        nodeHashMap.put(task.getId(), last);
     }
 
     private List<Task> getTasks() {
         List<Task> taskList = new ArrayList<>();
         Node node = first;
         while (node != null) {
-            taskList.add(node.getTask());
+            taskList.add((Task) node.getTask());
             node = node.getNext();
         }
         return taskList;
@@ -58,12 +59,15 @@ public class InMemoryHistoryManager implements HistoryManager {
 
     @Override
     public void remove(int id) {
+        if (!nodeHashMap.containsKey(id)) {
+            throw new RuntimeException("История с введенным id не найдена.");
+        }
         removeNode(nodeHashMap.get(id));
         nodeHashMap.remove(id);
     }
 
     private void removeNode(Node node) {
-        if (node == null){
+        if (node == null) {
             return;
         }
         if (node.getNext() == null && node.getPrev() == null) {
@@ -71,19 +75,28 @@ public class InMemoryHistoryManager implements HistoryManager {
         } else if (node.getPrev() == null && node.getNext() != null) {
             first = node.getNext();
         } else if (node.getNext() == null && node.getPrev() != null) {
-            last = node.getPrev();
+            removeLastNode();
         } else {
             node.getPrev()
                     .setNext(node.getNext());
         }
     }
 
-    public Node linkLast(Task task) {
-        Node node = first;
-        while (node.getNext() != null) {
-            node = node.getNext();
+    private void removeLastNode() {
+        Node next = first;
+        Node prev = first;
+        while (next.getNext()!=null){
+            prev = next;
+            next = next.getNext();
         }
-        node.setNext(new Node(task, null, node));
-        return node.getNext();
+        prev.setNext(null);
+    }
+
+    private Node linkLast(Task task) {
+        Node<Task> oldLast = last;
+        Node<Task> newNode = new Node<>(last, task, null);
+        last = newNode;
+        oldLast.setNext(newNode);
+        return oldLast;
     }
 }

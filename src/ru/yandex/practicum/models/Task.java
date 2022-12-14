@@ -1,5 +1,7 @@
 package ru.yandex.practicum.models;
 
+import java.util.Objects;
+
 import static ru.yandex.practicum.models.TaskType.TASK;
 
 public class Task {
@@ -10,7 +12,7 @@ public class Task {
 
     @Override
     public String toString() {
-        return id + "," + TASK + "," + title + "," + status + "," + "Description " + description;
+        return id + "," + TASK + "," + title + "," + status + "," + description;
     }
 
     public Task(String title, String description, TaskStatus status) {
@@ -70,5 +72,17 @@ public class Task {
                 return task;
         }
         return null;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null) return false;
+        if (this.getClass() != obj.getClass()) return false;
+        Task otherTask = (Task) obj;
+        return Objects.equals(status, otherTask.status) &&
+                Objects.equals(title, otherTask.title) &&
+                Objects.equals(description, otherTask.description) &&
+                (id == otherTask.id);
     }
 }
