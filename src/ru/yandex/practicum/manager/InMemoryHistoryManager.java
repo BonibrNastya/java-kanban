@@ -92,11 +92,10 @@ public class InMemoryHistoryManager implements HistoryManager {
         prev.setNext(null);
     }
 
-    private Node linkLast(Task task) {
+    private void linkLast(Task task) {
         Node<Task> oldLast = last;
         Node<Task> newNode = new Node<>(last, task, null);
         last = newNode;
         oldLast.setNext(newNode);
-        return oldLast;
     }
 }

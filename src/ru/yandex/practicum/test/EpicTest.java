@@ -1,12 +1,15 @@
-package ru.yandex.practicum.models;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import ru.yandex.practicum.manager.TaskManager;
+import ru.yandex.practicum.models.Epic;
+import ru.yandex.practicum.models.Subtask;
+import ru.yandex.practicum.models.TaskStatus;
 import ru.yandex.practicum.utils.Managers;
 
 import java.io.IOException;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -17,7 +20,7 @@ class EpicTest {
     private static Epic epic;
 
     @BeforeEach
-    public void beforeEach() throws IOException {
+    public void beforeEach() {
         taskManager = Managers.getDefault();
         epic = new Epic("title1", "descr1");
         taskManager.addEpic(epic);
@@ -60,8 +63,8 @@ class EpicTest {
     public void shouldBeNewIfSubtasksWithStatusNew() throws IOException {
 
         int epicId = epic.getId();
-        Subtask subtask = new Subtask("titleSub", "descrSub", TaskStatus.NEW, epicId);
-        Subtask subtask2 = new Subtask("titleSub", "descrSub", TaskStatus.NEW, epicId);
+        Subtask subtask = new Subtask("titleSub", "descrSub", TaskStatus.NEW, Duration.ofMinutes(5000),  LocalDateTime.of(2000,1,1,1,1),epicId);
+        Subtask subtask2 = new Subtask("titleSub", "descrSub", TaskStatus.NEW, Duration.ofMinutes(5000),  LocalDateTime.of(2000,1,1,1,1), epicId);
         taskManager.addSubtask(subtask);
         taskManager.addSubtask(subtask2);
         TaskStatus epicStatus = epic.getStatus();
@@ -74,8 +77,8 @@ class EpicTest {
     public void shouldBeDoneIfSubtasksWithStatusDone() throws IOException {
 
         int epicId = epic.getId();
-        Subtask subtask = new Subtask("titleSub", "descrSub", TaskStatus.NEW, epicId);
-        Subtask subtask2 = new Subtask("titleSub", "descrSub", TaskStatus.NEW, epicId);
+        Subtask subtask = new Subtask("titleSub", "descrSub", TaskStatus.NEW,Duration.ofMinutes(5000),  LocalDateTime.of(2000,1,1,1,1), epicId);
+        Subtask subtask2 = new Subtask("titleSub", "descrSub", TaskStatus.NEW, Duration.ofMinutes(5000),  LocalDateTime.of(2000,1,1,1,1),epicId);
 
         taskManager.addSubtask(subtask);
         taskManager.addSubtask(subtask2);
@@ -95,15 +98,15 @@ class EpicTest {
     @Test
     public void shouldBeInProgressIfSubtasksWithStatusNewAndDone() throws IOException {
         int epicId = epic.getId();
-        Subtask subtask = new Subtask("titleSub", "descrSub", TaskStatus.NEW, epicId);
-        Subtask subtask2 = new Subtask("titleSub", "descrSub", TaskStatus.NEW, epicId);
+        Subtask subtask = new Subtask("titleSub", "descrSub", TaskStatus.NEW, Duration.ofMinutes(5000),  LocalDateTime.of(2000,1,1,1,1),epicId);
+        Subtask subtask2 = new Subtask("titleSub", "descrSub", TaskStatus.NEW,Duration.ofMinutes(5000),  LocalDateTime.of(2000,1,1,1,1), epicId);
 
         taskManager.addSubtask(subtask);
         taskManager.addSubtask(subtask2);
 
         int subtaskId2 = subtask2.getId();
 
-        taskManager.changeSubtaskStatus(subtaskId2, TaskStatus.DONE);
+        taskManager.changeSubtaskStatus(subtaskId2, TaskStatus.IN_PROGRESS);
 
         TaskStatus epicStatus = epic.getStatus();
 
@@ -113,8 +116,8 @@ class EpicTest {
     @Test
     public void shouldBeInProgressIfSubtasksWithStatusInProgress() throws IOException {
         int epicId = epic.getId();
-        Subtask subtask = new Subtask("titleSub", "descrSub", TaskStatus.NEW, epicId);
-        Subtask subtask2 = new Subtask("titleSub", "descrSub", TaskStatus.NEW, epicId);
+        Subtask subtask = new Subtask("titleSub", "descrSub", TaskStatus.NEW, Duration.ofMinutes(5000),  LocalDateTime.of(2000,1,1,1,1), epicId);
+        Subtask subtask2 = new Subtask("titleSub", "descrSub", TaskStatus.NEW, Duration.ofMinutes(5000),  LocalDateTime.of(2000,1,1,1,1),epicId);
 
         taskManager.addSubtask(subtask);
         taskManager.addSubtask(subtask2);
@@ -127,7 +130,7 @@ class EpicTest {
 
         TaskStatus epicStatus = epic.getStatus();
 
-        assertEquals(epicStatus, TaskStatus.IN_PROGRESS, "Неверный статус эпика с сабтасками в процессе.");
+        assertEquals(epicStatus, TaskStatus.IN_PROGRESS, "Неверный статус эпика с сабтасками со статусом в процессе.");
 
     }
 

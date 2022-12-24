@@ -1,8 +1,7 @@
-package ru.yandex.practicum.manager;
-
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import ru.yandex.practicum.manager.FileBackedTasksManager;
 import ru.yandex.practicum.models.Subtask;
 import ru.yandex.practicum.models.Task;
 import ru.yandex.practicum.models.TaskStatus;
@@ -11,6 +10,8 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.List;
 
 
@@ -81,7 +82,7 @@ class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksManager>
     @Test
     public void saveSubtaskInFileAfterAdd() throws IOException {
         manager.addEpic(inputEpic);
-        manager.addSubtask(new Subtask("Sub 1", "Sub Dscr 1", TaskStatus.NEW, 1));
+        manager.addSubtask(new Subtask("Sub 1", "Sub Dscr 1", TaskStatus.NEW, Duration.ofMinutes(5000), LocalDateTime.of(2020,10,10,10,10), 1));
         String[] savedLine = null;
 
         try {
@@ -105,9 +106,10 @@ class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksManager>
     @Test
     public void shouldReturnLoadingTaskList() throws IOException {
         file = Path.of("src/ru/yandex/practicum/resources/fileBacked.csv").toFile();
+
         FileBackedTasksManager fileManager = manager.loadFromFile(file);
-        Task task = fileManager.taskMap.get(1);
-        assertFalse(task.equals("TASK"), "empty");
+        Task task = fileManager.getTaskMap().get(1);
+        assertNotEquals("TASK", task, "empty");
     }
 
     @Test
@@ -115,7 +117,7 @@ class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksManager>
         file = Path.of("src/ru/yandex/practicum/resources/fileBackedEmpty.csv").toFile();
         FileBackedTasksManager fileManager = manager.loadFromFile(file);
         List<Task> taskList = fileManager.getTaskList();
-        List<Task> historyList = fileManager.historyManager.getHistory();
+        List<Task> historyList = fileManager.getHistoryManager().getHistory();
 
         assertTrue(taskList.isEmpty(), "Неправильная работа восстановления из файла, когда список задач пустой.");
         assertTrue(historyList.isEmpty(), "Неправильная работа восстановления из файла, когда список историй пустой.");
@@ -126,7 +128,7 @@ class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksManager>
         file = Path.of("src/ru/yandex/practicum/resources/fileBackedEmptyEpic.csv").toFile();
         FileBackedTasksManager fileManager = manager.loadFromFile(file);
         String actualEpic = fileManager.getEpicById(1).toString();
-        String expectedEpic = "1,EPIC,Epic 1,NEW,Epic Dscr 1";
+        String expectedEpic = "1,EPIC,Epic 1,NEW,Epic Dscr 1,null,null,null";
 
         assertEquals(expectedEpic, actualEpic, "Неправильное восстановление эпика.");
     }

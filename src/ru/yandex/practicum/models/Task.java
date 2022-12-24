@@ -1,5 +1,7 @@
 package ru.yandex.practicum.models;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 import static ru.yandex.practicum.models.TaskType.TASK;
@@ -9,16 +11,43 @@ public class Task {
     protected String title;
     protected String description;
     protected TaskStatus status;
+    protected Duration duration;
+    protected LocalDateTime startTime;
+    protected LocalDateTime endTime;
+
+    public LocalDateTime getEndTime() {
+
+        return endTime = startTime.plus(duration);
+    }
 
     @Override
     public String toString() {
-        return id + "," + TASK + "," + title + "," + status + "," + description;
+        return id + "," + TASK + "," + title + "," + status + "," + description + ","
+                + duration + "," + startTime + "," + endTime;
     }
 
-    public Task(String title, String description, TaskStatus status) {
+    public Task(String title, String description, TaskStatus status, Duration duration, LocalDateTime startTime) {
         this.title = title;
         this.description = description;
         this.status = status;
+        this.duration = duration;
+        this.startTime = startTime;
+    }
+
+    public Duration getDuration() {
+        return duration;
+    }
+
+    public void setDuration(Duration duration) {
+        this.duration = duration;
+    }
+
+    public LocalDateTime getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
     }
 
     public int getId() {
@@ -57,9 +86,10 @@ public class Task {
         String[] split = value.split(",");
         TaskType status = TaskType.valueOf(split[1]);
         Task task;
-        switch (status){
+        switch (status) {
             case TASK:
-                task = new Task(split[2], split[4], TaskStatus.valueOf(split[3]));
+                task = new Task(split[2], split[4], TaskStatus.valueOf(split[3]),
+                        Duration.parse(split[5]), LocalDateTime.parse(split[6]));
                 task.setId(Integer.parseInt(split[0]));
                 return task;
             case EPIC:
@@ -67,7 +97,8 @@ public class Task {
                 task.setId(Integer.parseInt(split[0]));
                 return task;
             case SUBTASK:
-                task = new Subtask(split[2], split[4], TaskStatus.valueOf(split[3]), Integer.parseInt(split[5]));
+                task = new Subtask(split[2], split[4], TaskStatus.valueOf(split[3]),
+                        Duration.parse(split[5]), LocalDateTime.parse(split[6]), Integer.parseInt(split[7]));
                 task.setId(Integer.parseInt(split[0]));
                 return task;
         }
@@ -83,6 +114,9 @@ public class Task {
         return Objects.equals(status, otherTask.status) &&
                 Objects.equals(title, otherTask.title) &&
                 Objects.equals(description, otherTask.description) &&
-                (id == otherTask.id);
+                (id == otherTask.id) &&
+                (Objects.equals(duration, otherTask.duration)) &&
+                Objects.equals(startTime, otherTask.startTime) &&
+                Objects.equals(endTime, otherTask.endTime);
     }
 }

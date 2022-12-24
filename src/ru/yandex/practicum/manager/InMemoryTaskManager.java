@@ -21,14 +21,32 @@ public class InMemoryTaskManager implements TaskManager {
         this.taskMap = new HashMap<>();
         this.subtaskMap = new HashMap<>();
         this.epicMap = new HashMap<>();
-
         this.idCounterTask = 1;
+    }
+
+    public Map<Integer, Task> getTaskMap() {
+        return taskMap;
+    }
+
+    public HistoryManager getHistoryManager() {
+        return historyManager;
+    }
+
+    Comparator<Task> taskComparator = Comparator.comparing(Task::getStartTime,
+                    Comparator.nullsLast(Comparator.naturalOrder()))
+            .thenComparing(Task::getId);
+    Set<Task> taskTreeSet = new TreeSet<>(taskComparator);
+
+    public Set<Task> getPrioritizedTasks() {
+        return taskTreeSet;
     }
 
     @Override
     public void addTask(Task task) {
         task.setId(idCounterTask);
+        task.getEndTime();
         taskMap.put(idCounterTask, task);
+        taskTreeSet.add(task);
         idCounterTask++;
     }
 
@@ -42,10 +60,15 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void addSubtask(Subtask subtask) {
         subtask.setId(idCounterTask);
+        subtask.getEndTime();
         subtaskMap.put(idCounterTask, subtask);
+        taskTreeSet.add(subtask);
         idCounterTask++;
         Epic epic = epicMap.get(subtask.getEpicId());
         epic.getSubtaskList().add(subtask);
+        epic.updateEpicTime(subtaskMap);
+        epic.getEndTime();
+
     }
 
     @Override
@@ -97,7 +120,10 @@ public class InMemoryTaskManager implements TaskManager {
             throw new RuntimeException("Таска с id = " + id + " не найдена. Изменение не применилось.");
         }
         task.setId(id);
+        task.getEndTime();
         taskMap.put(id, task);
+        taskTreeSet.remove(taskMap.get(id));
+        taskTreeSet.add(task);
 
     }
 
@@ -125,14 +151,18 @@ public class InMemoryTaskManager implements TaskManager {
         }
 
         subtask.setId(id);
+        subtask.getEndTime();
         subtaskMap.put(id, subtask);
+        taskTreeSet.remove(subtaskMap.get(id));
+        taskTreeSet.add(subtask);
     }
 
     @Override
     public void clearTasks() {
 
         for (Map.Entry<Integer, Task> entry : taskMap.entrySet()) {
-            historyManager.remove(entry.getKey());
+            taskTreeSet.remove(entry.getValue());
+            if (historyManager.getHistory().contains(entry.getKey())) historyManager.remove(entry.getKey());
         }
         taskMap.clear();
     }
@@ -140,7 +170,8 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void clearEpics() {
         for (Map.Entry<Integer, Epic> entry : epicMap.entrySet()) {
-            historyManager.remove(entry.getKey());
+            taskTreeSet.remove(entry.getValue());
+            if (historyManager.getHistory().contains(entry.getKey())) historyManager.remove(entry.getKey());
         }
         epicMap.clear();
     }
@@ -148,7 +179,8 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void clearSubtasks() {
         for (Map.Entry<Integer, Subtask> entry : subtaskMap.entrySet()) {
-            historyManager.remove(entry.getKey());
+            taskTreeSet.remove(entry.getValue());
+            if (historyManager.getHistory().contains(entry.getKey())) historyManager.remove(entry.getKey());
             int epicId = entry.getValue().getEpicId();
             epicMap.get(epicId).setStatus(TaskStatus.NEW);
         }
@@ -162,6 +194,7 @@ public class InMemoryTaskManager implements TaskManager {
         if (!taskMap.containsKey(id)) {
             throw new RuntimeException("Таска с id = " + id + " не найдена. Таска не удалилась.");
         }
+        taskTreeSet.remove(taskMap.get(id));
         taskMap.remove(id);
         historyManager.remove(id);
     }
@@ -170,6 +203,13 @@ public class InMemoryTaskManager implements TaskManager {
     public void deleteEpicById(int id) {
         if (!epicMap.containsKey(id)) {
             throw new RuntimeException("Эпик с id = " + id + " не найдена. Эпик не удалился.");
+        }
+
+        for (Map.Entry<Integer, Subtask> entry : subtaskMap.entrySet()) {
+            if (entry.getValue().getEpicId() == id) {
+                subtaskMap.remove(entry.getKey());
+                taskTreeSet.remove(entry.getValue());
+            }
         }
         epicMap.remove(id);
         historyManager.remove(id);
@@ -185,6 +225,7 @@ public class InMemoryTaskManager implements TaskManager {
         if (!subtaskMap.containsValue(epicId)) {
             epic.setStatus(TaskStatus.NEW);
         }
+        taskTreeSet.remove(subtaskMap.get(id));
         subtaskMap.remove(id);
         historyManager.remove(id);
     }
