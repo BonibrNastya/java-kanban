@@ -1,11 +1,10 @@
-package ru.yandex.practicum.manager;
+package manager;
 
-import ru.yandex.practicum.models.Epic;
-import ru.yandex.practicum.models.Subtask;
-import ru.yandex.practicum.models.Task;
-import ru.yandex.practicum.models.TaskStatus;
+import models.Epic;
+import models.Subtask;
+import models.Task;
+import models.TaskStatus;
 
-import java.io.IOException;
 import java.util.List;
 
 public interface TaskManager {

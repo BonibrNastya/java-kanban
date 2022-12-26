@@ -1,11 +1,11 @@
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import ru.yandex.practicum.manager.TaskManager;
-import ru.yandex.practicum.models.Epic;
-import ru.yandex.practicum.models.Subtask;
-import ru.yandex.practicum.models.TaskStatus;
-import ru.yandex.practicum.utils.Managers;
+import manager.TaskManager;
+import models.Epic;
+import models.Subtask;
+import models.TaskStatus;
+import utils.Managers;
 
 import java.io.IOException;
 import java.time.Duration;

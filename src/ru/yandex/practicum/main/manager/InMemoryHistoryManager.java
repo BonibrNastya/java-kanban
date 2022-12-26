@@ -1,7 +1,7 @@
-package ru.yandex.practicum.manager;
+package manager;
 
-import ru.yandex.practicum.models.Node;
-import ru.yandex.practicum.models.Task;
+import models.Node;
+import models.Task;
 
 import java.util.*;
 

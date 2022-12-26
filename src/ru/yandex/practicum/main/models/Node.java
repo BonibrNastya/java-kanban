@@ -1,4 +1,4 @@
-package ru.yandex.practicum.models;
+package models;
 
 public class Node<Task> {
     private Task task;

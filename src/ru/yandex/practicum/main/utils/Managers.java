@@ -1,6 +1,9 @@
-package ru.yandex.practicum.utils;
+package utils;
 
-import ru.yandex.practicum.manager.*;
+import manager.HistoryManager;
+import manager.InMemoryHistoryManager;
+import manager.InMemoryTaskManager;
+import manager.TaskManager;
 
 public class Managers {
 

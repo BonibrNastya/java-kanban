@@ -1,9 +1,9 @@
 import org.junit.jupiter.api.Test;
-import ru.yandex.practicum.manager.HistoryManager;
-import ru.yandex.practicum.manager.TaskManager;
-import ru.yandex.practicum.models.Task;
-import ru.yandex.practicum.models.TaskStatus;
-import ru.yandex.practicum.utils.Managers;
+import manager.HistoryManager;
+import manager.TaskManager;
+import models.Task;
+import models.TaskStatus;
+import utils.Managers;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -14,11 +14,12 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class HistoryManagerTest {
 
-    HistoryManager historyManager = Managers.getDefaultHistory();
+    private final HistoryManager historyManager = Managers.getDefaultHistory();
+    private final TaskManager taskManager = Managers.getDefault();
+
     Task task = new Task("titleTask", "descrTask", TaskStatus.NEW, Duration.ofMinutes(5000),  LocalDateTime.of(2000,1,1,1,1));
     Task task2 = new Task("titleTask2", "descrTask2", TaskStatus.NEW, Duration.ofMinutes(5000),  LocalDateTime.of(2000,1,1,1,1));
     Task task3 = new Task("titleTask3", "descrTask3", TaskStatus.NEW, Duration.ofMinutes(5000),  LocalDateTime.of(2000,1,1,1,1));
-    TaskManager taskManager = Managers.getDefault();
 
 
     @Test

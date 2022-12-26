@@ -1,10 +1,8 @@
-package ru.yandex.practicum.models;
+package models;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Objects;
-
-import static ru.yandex.practicum.models.TaskType.TASK;
 
 public class Task {
     protected int id;
@@ -22,7 +20,7 @@ public class Task {
 
     @Override
     public String toString() {
-        return id + "," + TASK + "," + title + "," + status + "," + description + ","
+        return id + "," + TaskType.TASK + "," + title + "," + status + "," + description + ","
                 + duration + "," + startTime + "," + endTime;
     }
 

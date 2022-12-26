@@ -1,10 +1,10 @@
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import ru.yandex.practicum.manager.InMemoryTaskManager;
-import ru.yandex.practicum.models.Epic;
-import ru.yandex.practicum.models.Subtask;
-import ru.yandex.practicum.models.Task;
-import ru.yandex.practicum.models.TaskStatus;
+import manager.InMemoryTaskManager;
+import models.Epic;
+import models.Subtask;
+import models.Task;
+import models.TaskStatus;
 
 import java.time.Duration;
 import java.time.LocalDateTime;

@@ -1,4 +1,4 @@
-package ru.yandex.practicum.models;
+package models;
 
 import java.time.Duration;
 import java.time.LocalDateTime;

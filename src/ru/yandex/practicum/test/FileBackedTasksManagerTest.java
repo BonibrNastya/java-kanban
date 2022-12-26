@@ -1,10 +1,10 @@
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import ru.yandex.practicum.manager.FileBackedTasksManager;
-import ru.yandex.practicum.models.Subtask;
-import ru.yandex.practicum.models.Task;
-import ru.yandex.practicum.models.TaskStatus;
+import manager.FileBackedTasksManager;
+import models.Subtask;
+import models.Task;
+import models.TaskStatus;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -21,7 +21,7 @@ class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksManager>
 
     private Path testFile;
     private File file;
-    private final String HOME = "src/ru/yandex/practicum/resources/test" + System.nanoTime() + ".csv";
+    private final String HOME = "src/ru/yandex/practicum/main/resources/test" + System.nanoTime() + ".csv";
     private String home;
     private BufferedReader br;
     private String line;
@@ -105,7 +105,7 @@ class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksManager>
 
     @Test
     public void shouldReturnLoadingTaskList() throws IOException {
-        file = Path.of("src/ru/yandex/practicum/resources/fileBacked.csv").toFile();
+        file = Path.of("src/ru/yandex/practicum/main/resources/fileBacked.csv").toFile();
 
         FileBackedTasksManager fileManager = manager.loadFromFile(file);
         Task task = fileManager.getTaskMap().get(1);
@@ -114,7 +114,7 @@ class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksManager>
 
     @Test
     public void shouldNotLoadTaskAndHistoryWhenLoadingFileBackedEmpty() throws IOException {
-        file = Path.of("src/ru/yandex/practicum/resources/fileBackedEmpty.csv").toFile();
+        file = Path.of("src/ru/yandex/practicum/main/resources/fileBackedEmpty.csv").toFile();
         FileBackedTasksManager fileManager = manager.loadFromFile(file);
         List<Task> taskList = fileManager.getTaskList();
         List<Task> historyList = fileManager.getHistoryManager().getHistory();
@@ -125,7 +125,7 @@ class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksManager>
 
     @Test
     public void shouldReturnEpicWithoutSubtasksFromFileBackedEmptyEpic() throws IOException {
-        file = Path.of("src/ru/yandex/practicum/resources/fileBackedEmptyEpic.csv").toFile();
+        file = Path.of("src/ru/yandex/practicum/main/resources/fileBackedEmptyEpic.csv").toFile();
         FileBackedTasksManager fileManager = manager.loadFromFile(file);
         String actualEpic = fileManager.getEpicById(1).toString();
         String expectedEpic = "1,EPIC,Epic 1,NEW,Epic Dscr 1,null,null,null";

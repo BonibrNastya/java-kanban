@@ -1,9 +1,9 @@
 import org.junit.jupiter.api.Test;
-import ru.yandex.practicum.manager.TaskManager;
-import ru.yandex.practicum.models.Epic;
-import ru.yandex.practicum.models.Subtask;
-import ru.yandex.practicum.models.Task;
-import ru.yandex.practicum.models.TaskStatus;
+import manager.TaskManager;
+import models.Epic;
+import models.Subtask;
+import models.Task;
+import models.TaskStatus;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 abstract class TaskManagerTest<T extends TaskManager> {
 
-    T manager;
+   protected T manager;
 
     Task inputTask = new Task("titleTask", "descrTask", TaskStatus.NEW, Duration.ofMinutes(5000), LocalDateTime.of(2022,10,1,10,10));
     Task inputTask2 = new Task("titleTask2", "descrTask2", TaskStatus.NEW, Duration.ofMinutes(6000), LocalDateTime.of(2020,10,20,20,20));
@@ -278,10 +278,12 @@ abstract class TaskManagerTest<T extends TaskManager> {
         manager.addEpic(inputEpic);
         int epicId = inputEpic.getId();
         Subtask oldSubtask = new Subtask("title", "descr", TaskStatus.IN_PROGRESS, Duration.ofMinutes(5000), LocalDateTime.of(2000,1,1,1,1), epicId);
+        oldSubtask.getEndTime();
         manager.addSubtask(oldSubtask);
 
         Subtask expectedSubtask = new Subtask("newTitle", "newDescr", TaskStatus.NEW, Duration.ofMinutes(5000), LocalDateTime.of(2000,1,1,1,1), epicId);
         expectedSubtask.setId(2);
+        expectedSubtask.getEndTime();
 
         manager.updateSubtask(2, new Subtask("newTitle", "newDescr", TaskStatus.NEW,Duration.ofMinutes(5000),  LocalDateTime.of(2000,1,1,1,1), epicId));
         Subtask actualSubtask = manager.getSubtaskById(2);
