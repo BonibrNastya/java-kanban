@@ -21,41 +21,6 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
 
     public FileBackedTasksManager(Path path) {
         file = path.toFile();
-
-
-    }
-
-    public static void main(String[] args) {
-        file = new File("src/ru/yandex/practicum/resources/fileBacked.csv");
-        FileBackedTasksManager fileManager = new FileBackedTasksManager(file.toPath());
-
-        fileManager.addTask(new Task("titleTask", "descrTask", TaskStatus.NEW, Duration.ofMinutes(5000), LocalDateTime.of(2022,10,1,10,10)));
-        //       fileManager.addTask(new Task("Task 2", "Task Dscr 2", TaskStatus.NEW));
-
-        //      fileManager.addEpic(new Epic("Epic 1", "Epic Dscr 1"));
-//
-//        fileManager.addEpic(new Epic("Epic 2", "Epic Dscr 2"));
-        //       fileManager.addSubtask(new Subtask("Sub 1", "Sub Dscr 1", TaskStatus.NEW, 1));
-        //       fileManager.addSubtask(new Subtask("Sub 2", "Sub Dscr 2", TaskStatus.NEW, 1));
-//
-//       fileManager.getTaskById(1);
-//        fileManager.getEpicById(4);
-//        fileManager.getSubtaskById(5);
-        fileManager.save();
-        //      FileBackedTasksManager fileManager =  loadFromFile(file);
-        //       System.out.println(fileManager.getTaskList());
-
-        //       System.out.println(fileManager.getTaskList());
-//        System.out.println(fileManager.getEpicList());
-//        System.out.println(fileManager.getSubtaskList());
-        //       System.out.println(fileManager.historyManager.getHistory());
-//
-//        System.out.println(fileManager.getTaskList());
-//        System.out.println(fileManager.getEpicList());
-//        System.out.println(fileManager.getSubtaskList());
-//        System.out.println(fileManager.historyManager.getHistory());
-
-
     }
 
     private void save() {
