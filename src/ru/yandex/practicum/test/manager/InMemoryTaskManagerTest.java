@@ -1,6 +1,8 @@
+package manager;
+
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import manager.InMemoryTaskManager;
 import models.Epic;
 import models.Subtask;
 import models.Task;
@@ -31,7 +33,7 @@ class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager> {
         manager.addSubtask(inputSubtask);
         manager.addSubtask(inputSubtask2);
 
-        Set<Task> actualPrioritizedList = manager.getPrioritizedTasks();
+        Set<Task> actualPrioritizedList = InMemoryTaskManager.getPrioritizedTasks();
 
         assertNotNull(actualPrioritizedList, "Отсортированный список тасок пуст.");
     }
@@ -56,8 +58,8 @@ class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager> {
 
         assertEquals(expectedEpicList, actualEpicList, "Удаление эпика по id некорректно.");
 
-        assertNotNull(manager.getSubtaskList(), "Сабтаска с удаленным эпиком не удалилась.");
+        Assertions.assertNotNull(manager.getSubtaskList(), "Сабтаска с удаленным эпиком не удалилась.");
 
-        assertNotNull(manager.getPrioritizedTasks(), "Не удалилась сабтаска после удаления связанного эпика.");
+        Assertions.assertNotNull(InMemoryTaskManager.getPrioritizedTasks(), "Не удалилась сабтаска после удаления связанного эпика.");
     }
 }

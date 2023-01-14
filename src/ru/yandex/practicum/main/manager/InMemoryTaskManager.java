@@ -32,12 +32,12 @@ public class InMemoryTaskManager implements TaskManager {
         return historyManager;
     }
 
-    Comparator<Task> taskComparator = Comparator.comparing(Task::getStartTime,
+    static Comparator<Task> taskComparator = Comparator.comparing(Task::getStartTime,
                     Comparator.nullsLast(Comparator.naturalOrder()))
             .thenComparing(Task::getId);
-    Set<Task> taskTreeSet = new TreeSet<>(taskComparator);
+    static Set<Task> taskTreeSet = new TreeSet<>(taskComparator);
 
-    public Set<Task> getPrioritizedTasks() {
+    public static Set<Task> getPrioritizedTasks() {
         return taskTreeSet;
     }
 

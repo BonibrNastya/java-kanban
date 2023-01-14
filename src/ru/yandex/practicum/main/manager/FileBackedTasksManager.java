@@ -4,13 +4,11 @@ import exception.ManagerSaveException;
 import models.Epic;
 import models.Subtask;
 import models.Task;
-import models.TaskStatus;
 
 import java.io.*;
 
+import java.nio.file.Files;
 import java.nio.file.Path;
-import java.time.Duration;
-import java.time.LocalDateTime;
 import java.util.*;
 
 public class FileBackedTasksManager extends InMemoryTaskManager {
@@ -19,11 +17,19 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
     private static final String FIRST_LINE_FILE = "id,type,name,status,description,duration,startTime,endTime,epic\n";
     private static File file;
 
-    public FileBackedTasksManager(Path path) {
-        file = path.toFile();
+    public FileBackedTasksManager(File path) {
+        this.file = path;
     }
 
-    private void save() {
+    public void save() {
+        try{
+            if (Files.exists(file.toPath())){
+                Files.delete(file.toPath());
+            }
+            Files.createFile(file.toPath());
+        } catch (IOException exp){
+            throw new RuntimeException("Файл отсутствует");
+        }
         try {
             FileWriter fileWriter = new FileWriter(file);
             StringBuilder resultString = new StringBuilder(FIRST_LINE_FILE);
@@ -65,7 +71,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         save();
     }
 
-    private static String historyToString(HistoryManager manager) {
+    public static String historyToString(HistoryManager manager) {
         StringBuilder stringBuilder = new StringBuilder();
         manager.getHistory().forEach((t) -> stringBuilder.append(t.getId()).append(','));
         stringBuilder.deleteCharAt(stringBuilder.length() - 1);
@@ -83,7 +89,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
 
     public static FileBackedTasksManager loadFromFile(File file) throws IOException {
 
-        FileBackedTasksManager fileBackedTasksManager = new FileBackedTasksManager(file.toPath());
+        FileBackedTasksManager fileBackedTasksManager = new FileBackedTasksManager(file);
         BufferedReader br = null;
         try {
             br = new BufferedReader(new FileReader(file));
@@ -115,8 +121,8 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         } finally {
             try {
                 br.close();
-            } catch (IOException exp) {
-                System.out.println(exp.getMessage());
+            } catch (NullPointerException exp) {
+                System.out.println("Файл пуст");
             }
         }
         return fileBackedTasksManager;

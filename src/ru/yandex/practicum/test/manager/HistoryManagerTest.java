@@ -1,6 +1,6 @@
+package manager;
+
 import org.junit.jupiter.api.Test;
-import manager.HistoryManager;
-import manager.TaskManager;
 import models.Task;
 import models.TaskStatus;
 import utils.Managers;
