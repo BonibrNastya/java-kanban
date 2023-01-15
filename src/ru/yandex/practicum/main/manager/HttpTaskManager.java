@@ -1,23 +1,22 @@
 package manager;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
+import com.google.gson.*;
 import models.Epic;
 import models.Subtask;
 import models.Task;
 
-import java.io.File;
-import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.stream.Collectors;
 
 public class HttpTaskManager extends FileBackedTasksManager {
     private final KVTaskClient client;
-    private static final Gson gson = new Gson();
+    private static final Gson gson = new GsonBuilder()
+            .registerTypeAdapter(LocalDateTime.class, new HttpTaskServer.LocalDateAdapter())
+//            .serializeNulls()
+            .create();
 
-    public HttpTaskManager(String path) throws IOException, InterruptedException {
-        super(new File(path));
+    public HttpTaskManager(HistoryManager historyManager, String path) {
+        super(historyManager);
         client = new KVTaskClient(path);
 
         JsonElement tasks = JsonParser.parseString(client.load("tasks"));
@@ -34,7 +33,7 @@ public class HttpTaskManager extends FileBackedTasksManager {
             JsonArray jsonArray = epics.getAsJsonArray();
             for (JsonElement jsonTask : jsonArray) {
                 Epic task = gson.fromJson(jsonTask, Epic.class);
-                epicMap.put(task.getId(),task);
+                epicMap.put(task.getId(), task);
             }
         }
 
@@ -43,7 +42,7 @@ public class HttpTaskManager extends FileBackedTasksManager {
             JsonArray jsonArray = subs.getAsJsonArray();
             for (JsonElement jsonTask : jsonArray) {
                 Subtask task = gson.fromJson(jsonTask, Subtask.class);
-                subtaskMap.put(task.getId(),task);
+                subtaskMap.put(task.getId(), task);
             }
         }
 
@@ -52,11 +51,11 @@ public class HttpTaskManager extends FileBackedTasksManager {
             JsonArray jsonArray = histories.getAsJsonArray();
             for (JsonElement json : jsonArray) {
                 int id = json.getAsInt();
-                if(taskMap.containsKey(id)){
+                if (taskMap.containsKey(id)) {
                     historyManager.add(taskMap.get(id));
-                } else if(epicMap.containsKey(id)){
+                } else if (epicMap.containsKey(id)) {
                     historyManager.add(epicMap.get(id));
-                } else if (subtaskMap.containsKey(id)){
+                } else if (subtaskMap.containsKey(id)) {
                     historyManager.add(subtaskMap.get(id));
                 }
 
@@ -64,8 +63,9 @@ public class HttpTaskManager extends FileBackedTasksManager {
         }
 
     }
+
     @Override
-    public void save(){
+    public void save() {
         client.put("tasks", gson.toJson(taskMap.values()));
         client.put("epics", gson.toJson(epicMap.values()));
         client.put("subtasks", gson.toJson(subtaskMap.values()));

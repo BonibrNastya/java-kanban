@@ -8,7 +8,6 @@ import models.Task;
 import java.io.*;
 
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.*;
 
 public class FileBackedTasksManager extends InMemoryTaskManager {
@@ -17,17 +16,22 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
     private static final String FIRST_LINE_FILE = "id,type,name,status,description,duration,startTime,endTime,epic\n";
     private static File file;
 
-    public FileBackedTasksManager(File path) {
-        this.file = path;
+    public FileBackedTasksManager(HistoryManager historyManager, File path) {
+        super(historyManager);
+        file = path;
+    }
+
+    public FileBackedTasksManager(HistoryManager historyManager) {
+        super(historyManager);
     }
 
     public void save() {
-        try{
-            if (Files.exists(file.toPath())){
+        try {
+            if (Files.exists(file.toPath())) {
                 Files.delete(file.toPath());
             }
             Files.createFile(file.toPath());
-        } catch (IOException exp){
+        } catch (IOException exp) {
             throw new RuntimeException("Файл отсутствует");
         }
         try {
@@ -87,9 +91,8 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         return historyList;
     }
 
-    public static FileBackedTasksManager loadFromFile(File file) throws IOException {
+    public void loadFromFile() throws IOException {
 
-        FileBackedTasksManager fileBackedTasksManager = new FileBackedTasksManager(file);
         BufferedReader br = null;
         try {
             br = new BufferedReader(new FileReader(file));
@@ -107,25 +110,25 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
             if (!tasks.isEmpty()) {
                 for (int i = 1; i < tasks.size(); i++) {
                     Task task = Task.fromString(String.join("[]", tasks.get(i)));
-                    fileBackedTasksManager.addTaskToFileBacker(task);
+                    assert task != null;
+                    addTaskToFileBacker(task);
                 }
-                if (history != null) {
-                    List<Integer> histories = historyFromString(String.join("[]", history));
-                    for (Integer integer : histories) {
-                        fileBackedTasksManager.addHistoryToFileBacker(integer);
-                    }
-                }
-            } else {
-                return fileBackedTasksManager;
             }
+            if (history != null) {
+                List<Integer> histories = historyFromString(String.join("[]", history));
+                for (Integer integer : histories) {
+                    addHistoryToFileBacker(integer);
+                }
+            }
+
         } finally {
             try {
+                assert br != null;
                 br.close();
             } catch (NullPointerException exp) {
                 System.out.println("Файл пуст");
             }
         }
-        return fileBackedTasksManager;
     }
 
     private void addTaskToFileBacker(Task task) {

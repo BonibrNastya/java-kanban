@@ -15,11 +15,11 @@ import static org.junit.jupiter.api.Assertions.*;
 class HistoryManagerTest {
 
     private final HistoryManager historyManager = Managers.getDefaultHistory();
-    private final TaskManager taskManager = Managers.getDefault();
+    private final TaskManager taskManager = Managers.getInMemoryTaskManager(historyManager);
 
-    Task task = new Task("titleTask", "descrTask", TaskStatus.NEW, Duration.ofMinutes(5000),  LocalDateTime.of(2000,1,1,1,1));
-    Task task2 = new Task("titleTask2", "descrTask2", TaskStatus.NEW, Duration.ofMinutes(5000),  LocalDateTime.of(2000,1,1,1,1));
-    Task task3 = new Task("titleTask3", "descrTask3", TaskStatus.NEW, Duration.ofMinutes(5000),  LocalDateTime.of(2000,1,1,1,1));
+    Task task = new Task("titleTask", "descrTask", TaskStatus.NEW, 5000L,  LocalDateTime.of(2000,1,1,1,1));
+    Task task2 = new Task("titleTask2", "descrTask2", TaskStatus.NEW, 5000L,  LocalDateTime.of(2000,1,1,1,1));
+    Task task3 = new Task("titleTask3", "descrTask3", TaskStatus.NEW, 5000L,  LocalDateTime.of(2000,1,1,1,1));
 
 
     @Test

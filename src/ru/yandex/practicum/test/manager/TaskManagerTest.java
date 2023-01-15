@@ -17,9 +17,9 @@ abstract class TaskManagerTest<T extends TaskManager> {
 
    protected T manager;
 
-    Task inputTask = new Task("titleTask", "descrTask", TaskStatus.NEW, Duration.ofMinutes(5000), LocalDateTime.of(2022,10,1,10,10));
-    Task inputTask2 = new Task("titleTask2", "descrTask2", TaskStatus.NEW, Duration.ofMinutes(6000), LocalDateTime.of(2020,10,20,20,20));
-    Task inputTask3 = new Task("titleTask3", "descrTask2", TaskStatus.NEW, Duration.ofMinutes(4000), LocalDateTime.of(2010,5,5,5,5));
+    Task inputTask = new Task("titleTask", "descrTask", TaskStatus.NEW, 5000L, LocalDateTime.of(2022,10,1,10,10));
+    Task inputTask2 = new Task("titleTask2", "descrTask2", TaskStatus.NEW, 6000L, LocalDateTime.of(2020,10,20,20,20));
+    Task inputTask3 = new Task("titleTask3", "descrTask2", TaskStatus.NEW, 5000L, LocalDateTime.of(2010,5,5,5,5));
 
     Epic inputEpic = new Epic("titleEpic", "descrEpic");
     Epic inputEpic2 = new Epic("titleEpic2", "descrEpic2");
@@ -53,7 +53,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
         manager.addEpic(inputEpic);
         int epicId = inputEpic.getId();
 
-        Subtask inputSubtask = new Subtask("title", "descr", TaskStatus.NEW, Duration.ofMinutes(5000), LocalDateTime.of(2020,10,15,10,10), epicId);
+        Subtask inputSubtask = new Subtask("title", "descr", TaskStatus.NEW, 5000L, LocalDateTime.of(2020,10,15,10,10), epicId);
         manager.addSubtask(inputSubtask);
         int subtaskId = inputSubtask.getId();
 
@@ -116,8 +116,8 @@ abstract class TaskManagerTest<T extends TaskManager> {
         int epicId = inputEpic.getId();
 
         List<Subtask> subtaskList = new ArrayList<>();
-        Subtask inputSubtask = new Subtask("title", "descr", TaskStatus.NEW,Duration.ofMinutes(5000),LocalDateTime.of(2015,3,3,3,3), epicId);
-        Subtask inputSubtask2 = new Subtask("title2", "descr2", TaskStatus.NEW, Duration.ofMinutes(5000), LocalDateTime.of(2014,4,4,4,4), epicId);
+        Subtask inputSubtask = new Subtask("title", "descr", TaskStatus.NEW,5000L,LocalDateTime.of(2015,3,3,3,3), epicId);
+        Subtask inputSubtask2 = new Subtask("title2", "descr2", TaskStatus.NEW, 5000L, LocalDateTime.of(2014,4,4,4,4), epicId);
 
         subtaskList.add(inputSubtask);
         subtaskList.add(inputSubtask2);
@@ -206,8 +206,8 @@ abstract class TaskManagerTest<T extends TaskManager> {
         int epicId = inputEpic.getId();
 
         List<Subtask> subtaskList = new ArrayList<>();
-        Subtask inputSubtask = new Subtask("title", "descr", TaskStatus.NEW, Duration.ofMinutes(5000), LocalDateTime.of(2016,5,5,5,5),epicId);
-        Subtask inputSubtask2 = new Subtask("title2", "descr2", TaskStatus.NEW, Duration.ofMinutes(5000),LocalDateTime.of(2020,2,2,2,2), epicId);
+        Subtask inputSubtask = new Subtask("title", "descr", TaskStatus.NEW, 5000L, LocalDateTime.of(2016,5,5,5,5),epicId);
+        Subtask inputSubtask2 = new Subtask("title2", "descr2", TaskStatus.NEW, 5000L,LocalDateTime.of(2020,2,2,2,2), epicId);
 
         subtaskList.add(inputSubtask);
         subtaskList.add(inputSubtask2);
@@ -236,10 +236,10 @@ abstract class TaskManagerTest<T extends TaskManager> {
     public void shouldReturnUpdateTask() {
 
         manager.addTask(inputTask);
-        manager.updateTask(1, new Task("newTitle", "newDescr", TaskStatus.IN_PROGRESS, Duration.ofMinutes(5000), LocalDateTime.of(2020,1,1,1,1)));
+        manager.updateTask(1, new Task("newTitle", "newDescr", TaskStatus.IN_PROGRESS, 5000L, LocalDateTime.of(2020,1,1,1,1)));
         Task task = manager.getTaskById(1);
 
-        String expectedTask = "1,TASK,newTitle,IN_PROGRESS,newDescr,PT83H20M,2020-01-01T01:01,2020-01-04T12:21";
+        String expectedTask = "1,TASK,newTitle,IN_PROGRESS,newDescr,5000,2020-01-01T01:01,2020-01-04T12:21";
         String actualTask = task.toString();
 
         assertEquals(expectedTask, actualTask, "Полученная таска не соответствует updateTask.");
@@ -249,7 +249,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
     @Test
     public void shouldReturnExceptionIfTaskId1NotFoundToUpdate() {
         RuntimeException exp = assertThrows(RuntimeException.class, () ->
-                manager.updateTask(1, new Task("newTitle", "newDescr", TaskStatus.IN_PROGRESS, Duration.ofMinutes(5000), LocalDateTime.of(2020,1,1,1,1))));
+                manager.updateTask(1, new Task("newTitle", "newDescr", TaskStatus.IN_PROGRESS, 5000L, LocalDateTime.of(2020,1,1,1,1))));
         assertEquals("Таска с id = 1 не найдена. Изменение не применилось.", exp.getMessage());
     }
 
@@ -260,7 +260,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
         manager.updateEpic(1, new Epic("newTitle", "newDescr"));
         Epic epic = manager.getEpicById(1);
 
-        String expectedEpic = "1,EPIC,newTitle,NEW,newDescr,null,null,null";
+        String expectedEpic = "1,EPIC,newTitle,NEW,newDescr,0,null,null";
         String actualEpic = epic.toString();
 
         assertEquals(expectedEpic, actualEpic, "Полученный эпик не соответствует updateEpic.");
@@ -279,15 +279,15 @@ abstract class TaskManagerTest<T extends TaskManager> {
 
         manager.addEpic(inputEpic);
         int epicId = inputEpic.getId();
-        Subtask oldSubtask = new Subtask("title", "descr", TaskStatus.IN_PROGRESS, Duration.ofMinutes(5000), LocalDateTime.of(2000,1,1,1,1), epicId);
+        Subtask oldSubtask = new Subtask("title", "descr", TaskStatus.IN_PROGRESS, 5000L, LocalDateTime.of(2000,1,1,1,1), epicId);
         oldSubtask.getEndTime();
         manager.addSubtask(oldSubtask);
 
-        Subtask expectedSubtask = new Subtask("newTitle", "newDescr", TaskStatus.NEW, Duration.ofMinutes(5000), LocalDateTime.of(2000,1,1,1,1), epicId);
+        Subtask expectedSubtask = new Subtask("newTitle", "newDescr", TaskStatus.NEW, 5000L, LocalDateTime.of(2000,1,1,1,1), epicId);
         expectedSubtask.setId(2);
         expectedSubtask.getEndTime();
 
-        manager.updateSubtask(2, new Subtask("newTitle", "newDescr", TaskStatus.NEW,Duration.ofMinutes(5000),  LocalDateTime.of(2000,1,1,1,1), epicId));
+        manager.updateSubtask(2, new Subtask("newTitle", "newDescr", TaskStatus.NEW,5000L,  LocalDateTime.of(2000,1,1,1,1), epicId));
         Subtask actualSubtask = manager.getSubtaskById(2);
 
         assertEquals(expectedSubtask, actualSubtask, "Полученный эпик не соответствует updateEpic.");
@@ -298,11 +298,11 @@ abstract class TaskManagerTest<T extends TaskManager> {
     public void shouldReturnExceptionIfSubtaskId1NotFoundToUpdate() {
         manager.addEpic(inputEpic);
         int epicId = inputEpic.getId();
-        Subtask oldSubtask = new Subtask("title", "descr", TaskStatus.IN_PROGRESS,Duration.ofMinutes(5000),  LocalDateTime.of(2000,1,1,1,1), epicId);
+        Subtask oldSubtask = new Subtask("title", "descr", TaskStatus.IN_PROGRESS,5000L,  LocalDateTime.of(2000,1,1,1,1), epicId);
         manager.addSubtask(oldSubtask);
 
         RuntimeException exp = assertThrows(RuntimeException.class, () ->
-                manager.updateSubtask(1, new Subtask("newTitle", "newDescr", TaskStatus.NEW,Duration.ofMinutes(5000),  LocalDateTime.of(2000,1,1,1,1), epicId)));
+                manager.updateSubtask(1, new Subtask("newTitle", "newDescr", TaskStatus.NEW,5000L,  LocalDateTime.of(2000,1,1,1,1), epicId)));
         assertEquals("Сабтаска с id = 1 не найдена. Изменение не применилось.", exp.getMessage());
     }
 
@@ -310,12 +310,12 @@ abstract class TaskManagerTest<T extends TaskManager> {
     public void shouldReturnExceptionIfSubtaskNotContainedInEpicId5ToUpdate() {
         manager.addEpic(inputEpic);
         int epicId = inputEpic.getId();
-        Subtask oldSubtask = new Subtask("title", "descr", TaskStatus.IN_PROGRESS,Duration.ofMinutes(5000),  LocalDateTime.of(2000,1,1,1,1), epicId);
+        Subtask oldSubtask = new Subtask("title", "descr", TaskStatus.IN_PROGRESS,5000L,  LocalDateTime.of(2000,1,1,1,1), epicId);
         manager.addSubtask(oldSubtask);
         int subtaskId = oldSubtask.getId();
 
         RuntimeException exp = assertThrows(RuntimeException.class, () ->
-                manager.updateSubtask(subtaskId, new Subtask("newTitle", "newDescr", TaskStatus.NEW,Duration.ofMinutes(5000),  LocalDateTime.of(2000,1,1,1,1), 5)));
+                manager.updateSubtask(subtaskId, new Subtask("newTitle", "newDescr", TaskStatus.NEW,5000L,  LocalDateTime.of(2000,1,1,1,1), 5)));
         assertEquals("Сабтаска с id = " + subtaskId + " не связана с указанным эпиком.", exp.getMessage());
     }
 
@@ -365,8 +365,8 @@ abstract class TaskManagerTest<T extends TaskManager> {
         manager.addEpic(inputEpic2);
         int epicId = inputEpic.getId();
 
-        Subtask inputSubtask = new Subtask("title", "descr", TaskStatus.NEW,Duration.ofMinutes(5000),  LocalDateTime.of(2000,1,1,1,1), epicId);
-        Subtask inputSubtask2 = new Subtask("title2", "descr2", TaskStatus.NEW, Duration.ofMinutes(5000),  LocalDateTime.of(2000,1,1,1,1), epicId);
+        Subtask inputSubtask = new Subtask("title", "descr", TaskStatus.NEW,5000L,  LocalDateTime.of(2000,1,1,1,1), epicId);
+        Subtask inputSubtask2 = new Subtask("title2", "descr2", TaskStatus.NEW, 5000L,  LocalDateTime.of(2000,1,1,1,1), epicId);
 
         manager.addSubtask(inputSubtask);
         manager.addSubtask(inputSubtask2);
@@ -428,7 +428,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
         manager.getEpicById(epicId);
         manager.getEpicById(2);
 
-        Subtask inputSubtask = new Subtask("title", "descr", TaskStatus.NEW,Duration.ofMinutes(5000),  LocalDateTime.of(2000,1,1,1,1), epicId);
+        Subtask inputSubtask = new Subtask("title", "descr", TaskStatus.NEW,5000L,  LocalDateTime.of(2000,1,1,1,1), epicId);
 
         manager.addSubtask(inputSubtask);
 
@@ -453,8 +453,8 @@ abstract class TaskManagerTest<T extends TaskManager> {
         manager.addEpic(inputEpic);
         int epicId = inputEpic.getId();
 
-        Subtask inputSubtask = new Subtask("title", "descr", TaskStatus.NEW, Duration.ofMinutes(5000),  LocalDateTime.of(2000,1,1,1,1), epicId);
-        Subtask inputSubtask2 = new Subtask("title2", "descr2", TaskStatus.NEW, Duration.ofMinutes(5000),  LocalDateTime.of(2000,1,1,1,1),epicId);
+        Subtask inputSubtask = new Subtask("title", "descr", TaskStatus.NEW, 5000L,  LocalDateTime.of(2000,1,1,1,1), epicId);
+        Subtask inputSubtask2 = new Subtask("title2", "descr2", TaskStatus.NEW, 5000L,  LocalDateTime.of(2000,1,1,1,1),epicId);
 
         manager.addSubtask(inputSubtask);
         manager.addSubtask(inputSubtask2);
@@ -487,8 +487,8 @@ abstract class TaskManagerTest<T extends TaskManager> {
         manager.addEpic(inputEpic);
         int epicId = inputEpic.getId();
 
-        Subtask inputSubtask = new Subtask("title", "descr", TaskStatus.NEW, Duration.ofMinutes(5000),  LocalDateTime.of(2000,1,1,1,1), epicId);
-        Subtask inputSubtask2 = new Subtask("title2", "descr2", TaskStatus.NEW, Duration.ofMinutes(5000),  LocalDateTime.of(2000,1,1,1,1), epicId);
+        Subtask inputSubtask = new Subtask("title", "descr", TaskStatus.NEW, 5000L,  LocalDateTime.of(2000,1,1,1,1), epicId);
+        Subtask inputSubtask2 = new Subtask("title2", "descr2", TaskStatus.NEW, 5000L,  LocalDateTime.of(2000,1,1,1,1), epicId);
 
         manager.addSubtask(inputSubtask);
         manager.addSubtask(inputSubtask2);
@@ -505,7 +505,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
     public void shouldReturnExceptionWhenEpicWithId5DoesNotFoundToGetAllSubtasksFromEpic() {
         manager.addEpic(inputEpic);
         manager.addEpic(inputEpic2);
-        Subtask inputSubtask = new Subtask("title", "descr", TaskStatus.NEW,Duration.ofMinutes(5000),  LocalDateTime.of(2000,1,1,1,1), 2);
+        Subtask inputSubtask = new Subtask("title", "descr", TaskStatus.NEW,5000L,  LocalDateTime.of(2000,1,1,1,1), 2);
         manager.addSubtask(inputSubtask);
 
         RuntimeException exp = assertThrows(RuntimeException.class, () -> manager.getAllSubtasksFromEpic(5));
@@ -516,7 +516,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
     public void shouldReturnExceptionWhenEpicWithId1HasNotSubtasksToGetAllSubtasksFromEpic() {
         manager.addEpic(inputEpic);
         manager.addEpic(inputEpic2);
-        Subtask inputSubtask = new Subtask("title", "descr", TaskStatus.NEW, Duration.ofMinutes(5000),  LocalDateTime.of(2000,1,1,1,1),2);
+        Subtask inputSubtask = new Subtask("title", "descr", TaskStatus.NEW, 5000L,  LocalDateTime.of(2000,1,1,1,1),2);
         manager.addSubtask(inputSubtask);
 
         RuntimeException exp = assertThrows(RuntimeException.class, () -> manager.getAllSubtasksFromEpic(1));
@@ -526,7 +526,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
     @Test
     public void shouldChangeSubtaskStatus() {
         manager.addEpic(inputEpic);
-        Subtask inputSubtask = new Subtask("title", "descr", TaskStatus.NEW, Duration.ofMinutes(5000),  LocalDateTime.of(2000,1,1,1,1),1);
+        Subtask inputSubtask = new Subtask("title", "descr", TaskStatus.NEW, 5000L,  LocalDateTime.of(2000,1,1,1,1),1);
         manager.addSubtask(inputSubtask);
 
         manager.changeSubtaskStatus(2, TaskStatus.IN_PROGRESS);

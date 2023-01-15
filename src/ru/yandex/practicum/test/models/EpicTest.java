@@ -1,16 +1,11 @@
 package models;
 
+import manager.InMemoryHistoryManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
 import manager.TaskManager;
-import models.Epic;
-import models.Subtask;
-import models.TaskStatus;
 import utils.Managers;
 
-import java.io.IOException;
-import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -23,21 +18,14 @@ class EpicTest {
 
     @BeforeEach
     public void beforeEach() {
-        taskManager = Managers.getDefault();
+        taskManager = Managers.getInMemoryTaskManager(new InMemoryHistoryManager());
         epic = new Epic("title1", "descr1");
         taskManager.addEpic(epic);
 
     }
-    //подготовка - определение входных параметров и предусловий
-
-    //исполнение - определение процедуры тестирования
-
-    //проверка - сравнение ожидаемого результата с полученным
-
 
     @Test
     public void addNewEpic() {
-
         final int epicId = epic.getId();
         final Epic savedEpic = taskManager.getEpicById(epicId);
 
@@ -62,11 +50,11 @@ class EpicTest {
     }
 
     @Test
-    public void shouldBeNewIfSubtasksWithStatusNew() throws IOException {
+    public void shouldBeNewIfSubtasksWithStatusNew() {
 
         int epicId = epic.getId();
-        Subtask subtask = new Subtask("titleSub", "descrSub", TaskStatus.NEW, Duration.ofMinutes(5000),  LocalDateTime.of(2000,1,1,1,1),epicId);
-        Subtask subtask2 = new Subtask("titleSub", "descrSub", TaskStatus.NEW, Duration.ofMinutes(5000),  LocalDateTime.of(2000,1,1,1,1), epicId);
+        Subtask subtask = new Subtask("titleSub", "descrSub", TaskStatus.NEW, 5000L, LocalDateTime.of(2000, 1, 1, 1, 1), epicId);
+        Subtask subtask2 = new Subtask("titleSub", "descrSub", TaskStatus.NEW, 5000L, LocalDateTime.of(2000, 1, 1, 1, 1), epicId);
         taskManager.addSubtask(subtask);
         taskManager.addSubtask(subtask2);
         TaskStatus epicStatus = epic.getStatus();
@@ -76,11 +64,11 @@ class EpicTest {
     }
 
     @Test
-    public void shouldBeDoneIfSubtasksWithStatusDone() throws IOException {
+    public void shouldBeDoneIfSubtasksWithStatusDone() {
 
         int epicId = epic.getId();
-        Subtask subtask = new Subtask("titleSub", "descrSub", TaskStatus.NEW,Duration.ofMinutes(5000),  LocalDateTime.of(2000,1,1,1,1), epicId);
-        Subtask subtask2 = new Subtask("titleSub", "descrSub", TaskStatus.NEW, Duration.ofMinutes(5000),  LocalDateTime.of(2000,1,1,1,1),epicId);
+        Subtask subtask = new Subtask("titleSub", "descrSub", TaskStatus.NEW, 5000L, LocalDateTime.of(2000, 1, 1, 1, 1), epicId);
+        Subtask subtask2 = new Subtask("titleSub", "descrSub", TaskStatus.NEW, 5000L, LocalDateTime.of(2000, 1, 1, 1, 1), epicId);
 
         taskManager.addSubtask(subtask);
         taskManager.addSubtask(subtask2);
@@ -98,10 +86,10 @@ class EpicTest {
     }
 
     @Test
-    public void shouldBeInProgressIfSubtasksWithStatusNewAndDone() throws IOException {
+    public void shouldBeInProgressIfSubtasksWithStatusNewAndDone() {
         int epicId = epic.getId();
-        Subtask subtask = new Subtask("titleSub", "descrSub", TaskStatus.NEW, Duration.ofMinutes(5000),  LocalDateTime.of(2000,1,1,1,1),epicId);
-        Subtask subtask2 = new Subtask("titleSub", "descrSub", TaskStatus.NEW,Duration.ofMinutes(5000),  LocalDateTime.of(2000,1,1,1,1), epicId);
+        Subtask subtask = new Subtask("titleSub", "descrSub", TaskStatus.NEW, 5000L, LocalDateTime.of(2000, 1, 1, 1, 1), epicId);
+        Subtask subtask2 = new Subtask("titleSub", "descrSub", TaskStatus.NEW, 5000L, LocalDateTime.of(2000, 1, 1, 1, 1), epicId);
 
         taskManager.addSubtask(subtask);
         taskManager.addSubtask(subtask2);
@@ -116,10 +104,10 @@ class EpicTest {
     }
 
     @Test
-    public void shouldBeInProgressIfSubtasksWithStatusInProgress() throws IOException {
+    public void shouldBeInProgressIfSubtasksWithStatusInProgress() {
         int epicId = epic.getId();
-        Subtask subtask = new Subtask("titleSub", "descrSub", TaskStatus.NEW, Duration.ofMinutes(5000),  LocalDateTime.of(2000,1,1,1,1), epicId);
-        Subtask subtask2 = new Subtask("titleSub", "descrSub", TaskStatus.NEW, Duration.ofMinutes(5000),  LocalDateTime.of(2000,1,1,1,1),epicId);
+        Subtask subtask = new Subtask("titleSub", "descrSub", TaskStatus.NEW, 5000L, LocalDateTime.of(2000, 1, 1, 1, 1), epicId);
+        Subtask subtask2 = new Subtask("titleSub", "descrSub", TaskStatus.NEW, 5000L, LocalDateTime.of(2000, 1, 1, 1, 1), epicId);
 
         taskManager.addSubtask(subtask);
         taskManager.addSubtask(subtask2);

@@ -14,7 +14,12 @@ public class Epic extends Task {
     private final List<Subtask> subtaskMap = new ArrayList<>();
 
     public Epic(String title, String description) {
-        super(title, description, TaskStatus.NEW, null, null);
+        super(title, description, TaskStatus.NEW, 0, null);
+    }
+
+    public Epic(String title, String desc, long duration, LocalDateTime startTime){
+        super(title, desc, TaskStatus.NEW, duration,startTime);
+        this.endTime = super.getEndTime();
     }
 
     public List<Subtask> getSubtaskList() {
@@ -37,7 +42,7 @@ public class Epic extends Task {
                 .stream().map(Subtask::getEndTime).max(localDateTimeComparator);
 
         if (epicStartTime.isPresent() && epicEndTime.isPresent()) {
-            setDuration(Duration.between(epicStartTime.get(), epicEndTime.get()));
+            setDuration(Duration.between(epicStartTime.get(), epicEndTime.get()).toMinutes());
         }
     }
 }

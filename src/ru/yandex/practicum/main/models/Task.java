@@ -1,6 +1,5 @@
 package models;
 
-import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
@@ -9,13 +8,13 @@ public class Task {
     protected String title;
     protected String description;
     protected TaskStatus status;
-    protected Duration duration;
+    protected long duration;
     protected LocalDateTime startTime;
     protected LocalDateTime endTime;
 
     public LocalDateTime getEndTime() {
-
-        return endTime = startTime.plus(duration);
+        long l = 1L;
+        return endTime = startTime.plusMinutes(duration * l);
     }
 
     @Override
@@ -24,7 +23,7 @@ public class Task {
                 + duration + "," + startTime + "," + endTime;
     }
 
-    public Task(String title, String description, TaskStatus status, Duration duration, LocalDateTime startTime) {
+    public Task(String title, String description, TaskStatus status, long duration, LocalDateTime startTime) {
         this.title = title;
         this.description = description;
         this.status = status;
@@ -32,11 +31,11 @@ public class Task {
         this.startTime = startTime;
     }
 
-    public Duration getDuration() {
+    public long getDuration() {
         return duration;
     }
 
-    public void setDuration(Duration duration) {
+    public void setDuration(long duration) {
         this.duration = duration;
     }
 
@@ -85,20 +84,23 @@ public class Task {
         TaskType status = TaskType.valueOf(split[1]);
         Task task;
         switch (status) {
-            case TASK:
+            case TASK -> {
                 task = new Task(split[2], split[4], TaskStatus.valueOf(split[3]),
-                        Duration.parse(split[5]), LocalDateTime.parse(split[6]));
+                        Long.parseLong(split[5]), LocalDateTime.parse(split[6]));
                 task.setId(Integer.parseInt(split[0]));
                 return task;
-            case EPIC:
+            }
+            case EPIC -> {
                 task = new Epic(split[2], split[4]);
                 task.setId(Integer.parseInt(split[0]));
                 return task;
-            case SUBTASK:
+            }
+            case SUBTASK -> {
                 task = new Subtask(split[2], split[4], TaskStatus.valueOf(split[3]),
-                        Duration.parse(split[5]), LocalDateTime.parse(split[6]), Integer.parseInt(split[7]));
+                        Long.parseLong(split[5]), LocalDateTime.parse(split[6]), Integer.parseInt(split[7]));
                 task.setId(Integer.parseInt(split[0]));
                 return task;
+            }
         }
         return null;
     }
@@ -113,7 +115,7 @@ public class Task {
                 Objects.equals(title, otherTask.title) &&
                 Objects.equals(description, otherTask.description) &&
                 (id == otherTask.id) &&
-                (Objects.equals(duration, otherTask.duration)) &&
+                (duration == otherTask.duration) &&
                 Objects.equals(startTime, otherTask.startTime) &&
                 Objects.equals(endTime, otherTask.endTime);
     }

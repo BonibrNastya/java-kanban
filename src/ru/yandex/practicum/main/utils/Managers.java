@@ -3,12 +3,14 @@ package utils;
 import manager.*;
 
 import java.io.IOException;
-import java.nio.file.Path;
 
 public class Managers {
 
-    public static TaskManager getDefault() {
-        return new InMemoryTaskManager();
+    //    public static TaskManager getDefault() {
+//        return new InMemoryTaskManager();
+//    }
+    public static TaskManager getInMemoryTaskManager(HistoryManager manager) {
+        return new InMemoryTaskManager(manager);
     }
 
     public static HistoryManager getDefaultHistory() {
@@ -19,8 +21,8 @@ public class Managers {
 //        return new FileBackedTasksManager(Path.of("src/ru/yandex/practicum/main/resources/fileHttp.csv"));
 //    }
 
-    public static HttpTaskManager getDefaultHttpManager() throws IOException, InterruptedException {
-        return new HttpTaskManager("http://localhost:" + KVServer.PORT);
+    public static HttpTaskManager getDefaultHttpManager(HistoryManager historyManager) throws IOException, InterruptedException {
+        return new HttpTaskManager(historyManager,"http://localhost:" + KVServer.PORT);
     }
 
 }

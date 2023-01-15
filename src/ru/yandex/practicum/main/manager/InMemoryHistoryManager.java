@@ -85,7 +85,7 @@ public class InMemoryHistoryManager implements HistoryManager {
     private void removeLastNode() {
         Node next = first;
         Node prev = first;
-        while (next.getNext()!=null){
+        while (next.getNext() != null) {
             prev = next;
             next = next.getNext();
         }

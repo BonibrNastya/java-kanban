@@ -18,7 +18,6 @@ import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -47,7 +46,8 @@ public class HttpTaskServer {
         private final TaskManager manager;
 
         public TasksHandler() throws IOException, InterruptedException {
-            this.manager = Managers.getDefaultHttpManager();
+            HistoryManager historyManager = Managers.getDefaultHistory();
+            this.manager = Managers.getDefaultHttpManager(historyManager);
         }
 
 
@@ -56,7 +56,7 @@ public class HttpTaskServer {
             GsonBuilder gsonBuilder = new GsonBuilder();
             gsonBuilder.serializeNulls();
             gsonBuilder.registerTypeAdapter(LocalDateTime.class, new LocalDateAdapter());
-            gsonBuilder.registerTypeAdapter(Duration.class, new DurationAdapter());
+            // gsonBuilder.registerTypeAdapter(Duration.class, new DurationAdapter());
             gson = gsonBuilder.create();
 
             Endpoint endpoint = getEndpoint(exchange.getRequestURI().getPath(), exchange.getRequestURI().getQuery(), exchange.getRequestMethod());
@@ -453,25 +453,8 @@ public class HttpTaskServer {
         }
     }
 
-    static class DurationAdapter extends TypeAdapter<Duration> {
 
-        @Override
-        public void write(JsonWriter jsonWriter, Duration duration) throws IOException {
-            jsonWriter.value(duration.toMinutes());
-        }
-
-        @Override
-        public Duration read(JsonReader jsonReader) throws IOException {
-            String durationString = jsonReader.nextString();
-            if (durationString != null) {
-                return Duration.ofMinutes(Long.parseLong(durationString));
-            }
-            return null;
-        }
-    }
-
-    static class LocalDateAdapter extends TypeAdapter<LocalDateTime> {
-        //   private static final DateTimeFormatter formatterWrite = DateTimeFormatter.ofPattern("dd--MM--yyyy");
+    public static class LocalDateAdapter extends TypeAdapter<LocalDateTime> {
         private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
 
         @Override

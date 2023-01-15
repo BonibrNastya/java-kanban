@@ -4,24 +4,21 @@ import models.Epic;
 import models.Subtask;
 import models.Task;
 import models.TaskStatus;
-import utils.Managers;
 
 import java.util.*;
 
 public class InMemoryTaskManager implements TaskManager {
-    protected final Map<Integer, Task> taskMap;
-    protected final Map<Integer, Subtask> subtaskMap;
-    protected final Map<Integer, Epic> epicMap;
+    protected final Map<Integer, Task> taskMap = new HashMap<>();
+    protected final Map<Integer, Subtask> subtaskMap = new HashMap<>();
+    protected final Map<Integer, Epic> epicMap = new HashMap<>();
 
-    protected HistoryManager historyManager = Managers.getDefaultHistory();
+    protected HistoryManager historyManager;
 
-    protected int idCounterTask;
+    protected int idCounterTask = 1;
 
-    public InMemoryTaskManager() {
-        this.taskMap = new HashMap<>();
-        this.subtaskMap = new HashMap<>();
-        this.epicMap = new HashMap<>();
-        this.idCounterTask = 1;
+
+    public InMemoryTaskManager(HistoryManager historyManager) {
+        this.historyManager = historyManager;
     }
 
     public Map<Integer, Task> getTaskMap() {

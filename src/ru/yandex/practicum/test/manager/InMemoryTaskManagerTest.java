@@ -7,6 +7,7 @@ import models.Epic;
 import models.Subtask;
 import models.Task;
 import models.TaskStatus;
+import utils.Managers;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -20,7 +21,7 @@ class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager> {
 
     @BeforeEach
     void setUp() {
-        this.manager = new InMemoryTaskManager();
+        this.manager = new InMemoryTaskManager(Managers.getDefaultHistory());
     }
 
     @Test
@@ -28,8 +29,8 @@ class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager> {
         manager.addTask(inputTask);
         manager.addTask(inputTask3);
         manager.addEpic(inputEpic);
-        Subtask inputSubtask = new Subtask("title", "descr", TaskStatus.NEW, Duration.ofMinutes(5000), LocalDateTime.of(2020, 10, 15, 10, 10), 3);
-        Subtask inputSubtask2 = new Subtask("title", "descr", TaskStatus.NEW, Duration.ofMinutes(4000), LocalDateTime.of(2020, 10, 15, 10, 10), 3);
+        Subtask inputSubtask = new Subtask("title", "descr", TaskStatus.NEW, 5000L, LocalDateTime.of(2020, 10, 15, 10, 10), 3);
+        Subtask inputSubtask2 = new Subtask("title", "descr", TaskStatus.NEW, 5000L, LocalDateTime.of(2020, 10, 15, 10, 10), 3);
         manager.addSubtask(inputSubtask);
         manager.addSubtask(inputSubtask2);
 
@@ -47,7 +48,7 @@ class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager> {
         manager.getEpicById(epicId);
         manager.getEpicById(2);
 
-        Subtask inputSubtask = new Subtask("title", "descr", TaskStatus.NEW,Duration.ofMinutes(5000),  LocalDateTime.of(2000,1,1,1,1), epicId);
+        Subtask inputSubtask = new Subtask("title", "descr", TaskStatus.NEW,5000L,  LocalDateTime.of(2000,1,1,1,1), epicId);
 
         manager.addSubtask(inputSubtask);
 

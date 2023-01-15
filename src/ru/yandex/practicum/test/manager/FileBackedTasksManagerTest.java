@@ -6,12 +6,11 @@ import org.junit.jupiter.api.Test;
 import models.Subtask;
 import models.Task;
 import models.TaskStatus;
+import utils.Managers;
 
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -22,15 +21,15 @@ class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksManager>
 
     private final String HOME = "src/ru/yandex/practicum/main/resources/test" + System.nanoTime() + ".csv";
     private final Path testFile = Path.of(HOME);
-    private File file = new File(String.valueOf(testFile));
+    private final File file = new File(String.valueOf(testFile));
     private BufferedReader br;
     private String line;
 
 
     @BeforeEach
-    public void setUp() throws IOException {
+    public void setUp() {
 
-        manager = new FileBackedTasksManager(file);
+        manager = new FileBackedTasksManager(Managers.getDefaultHistory(), file);
 
     }
 
@@ -83,7 +82,7 @@ class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksManager>
     @Test
     public void saveSubtaskInFileAfterAdd() throws IOException {
         manager.addEpic(inputEpic);
-        manager.addSubtask(new Subtask("Sub 1", "Sub Dscr 1", TaskStatus.NEW, Duration.ofMinutes(5000), LocalDateTime.of(2020, 10, 10, 10, 10), 1));
+        manager.addSubtask(new Subtask("Sub 1", "Sub Dscr 1", TaskStatus.NEW, 5000L, LocalDateTime.of(2020, 10, 10, 10, 10), 1));
         String[] savedLine = null;
 
         try {
@@ -106,17 +105,12 @@ class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksManager>
 
     @Test
     public void shouldReturnLoadingTaskList() throws IOException {
-        File testFile = new File("src/ru/yandex/practicum/main/resources/fileBacked.csv");
-        //  file = Path.of("src/ru/yandex/practicum/main/resources/fileBacked.csv").toFile();
 
-        FileBackedTasksManager fileManager = FileBackedTasksManager
-                .loadFromFile(testFile);
-        List<Task> taskList = fileManager.getTaskList();
-        //  Task task = fileManager.getTaskMap().get(1);
+        manager.addTask(inputTask2);
+        manager.loadFromFile();
+        List<Task> taskList = manager.getTaskList();
         assertFalse(taskList.isEmpty(), "empty taskList");
-        //   assertNotEquals("TASK", task, "empty");
     }
-
 
 
 }

@@ -39,6 +39,10 @@ public class KVServer {
                     h.sendResponseHeaders(400, 0);
                     return;
                 }
+                if (data.get(key) == null) {
+                    System.out.println("Данные по ключу " + key + " отсутствуют");
+                    h.sendResponseHeaders(404, 0);
+                }
                 String loadKey = data.get(key);
                 sendText(h, loadKey);
                 System.out.println("Значение для ключа " + key + " успешно обновлено!");
