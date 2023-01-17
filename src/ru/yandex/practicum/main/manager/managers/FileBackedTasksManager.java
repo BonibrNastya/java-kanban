@@ -1,4 +1,4 @@
-package manager;
+package manager.managers;
 
 import exception.ManagerSaveException;
 import models.Epic;

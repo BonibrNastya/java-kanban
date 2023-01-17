@@ -1,5 +1,8 @@
 package models;
 
+import models.enums.TaskStatus;
+import models.enums.TaskType;
+
 import java.time.LocalDateTime;
 import java.util.Objects;
 

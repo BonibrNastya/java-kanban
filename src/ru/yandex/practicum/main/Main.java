@@ -1,14 +1,14 @@
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import manager.HistoryManager;
-import manager.HttpTaskServer;
-import manager.KVServer;
-import manager.TaskManager;
+import manager.http.KVServer;
+import manager.http.LocalDateAdapter;
+import manager.managers.HistoryManager;
+import manager.managers.TaskManager;
 import models.Epic;
 import models.Subtask;
 import models.Task;
-import models.TaskStatus;
+import models.enums.TaskStatus;
 import utils.Managers;
 
 import java.time.LocalDateTime;
@@ -19,7 +19,7 @@ public class Main {
         KVServer server;
         try {
             Gson gson = new GsonBuilder()
-                    .registerTypeAdapter(LocalDateTime.class, new HttpTaskServer.LocalDateAdapter())
+                    .registerTypeAdapter(LocalDateTime.class, new LocalDateAdapter())
                     .create();
 
             server = new KVServer();

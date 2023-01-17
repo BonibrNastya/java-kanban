@@ -1,15 +1,15 @@
 package manager;
 
+import manager.managers.InMemoryTaskManager;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import models.Epic;
 import models.Subtask;
 import models.Task;
-import models.TaskStatus;
+import models.enums.TaskStatus;
 import utils.Managers;
 
-import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;

@@ -1,6 +1,8 @@
-package manager;
+package manager.http;
 
 import com.google.gson.*;
+import manager.managers.FileBackedTasksManager;
+import manager.managers.HistoryManager;
 import models.Epic;
 import models.Subtask;
 import models.Task;
@@ -11,9 +13,9 @@ import java.util.stream.Collectors;
 public class HttpTaskManager extends FileBackedTasksManager {
     private final KVTaskClient client;
     private static final Gson gson = new GsonBuilder()
-            .registerTypeAdapter(LocalDateTime.class, new HttpTaskServer.LocalDateAdapter())
-//            .serializeNulls()
+            .registerTypeAdapter(LocalDateTime.class, new LocalDateAdapter())
             .create();
+
 
     public HttpTaskManager(HistoryManager historyManager, String path) {
         super(historyManager);

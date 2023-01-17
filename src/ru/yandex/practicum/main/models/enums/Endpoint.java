@@ -1,4 +1,4 @@
-package models;
+package models.enums;
 
 public enum Endpoint {
     GET_PRIORITIZED,

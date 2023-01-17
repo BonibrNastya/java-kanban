@@ -1,11 +1,12 @@
 package manager;
 
+import manager.managers.HistoryManager;
+import manager.managers.TaskManager;
 import org.junit.jupiter.api.Test;
 import models.Task;
-import models.TaskStatus;
+import models.enums.TaskStatus;
 import utils.Managers;
 
-import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;

@@ -1,4 +1,4 @@
-package manager;
+package manager.http;
 
 import java.io.IOException;
 import java.net.URI;
@@ -7,6 +7,8 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+
+import static java.net.HttpURLConnection.HTTP_OK;
 
 
 public class KVTaskClient {
@@ -51,7 +53,7 @@ public class KVTaskClient {
         HttpClient client = HttpClient.newHttpClient();
         try {
             HttpResponse<String> response = client.send(req, HttpResponse.BodyHandlers.ofString(DEFAULT_CHARSET));
-            if (response.statusCode() != 200) {
+            if (response.statusCode() != HTTP_OK) {
                 System.out.println("Что-то пошло не так. Сервер вернул код состояния: " + response.statusCode());
             }
         } catch (NullPointerException | IOException | InterruptedException exp) {

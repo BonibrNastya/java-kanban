@@ -1,9 +1,10 @@
 package models;
 
-import manager.InMemoryHistoryManager;
+import manager.managers.InMemoryHistoryManager;
+import models.enums.TaskStatus;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import manager.TaskManager;
+import manager.managers.TaskManager;
 import utils.Managers;
 
 import java.time.LocalDateTime;

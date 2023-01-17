@@ -1,9 +1,9 @@
-package manager;
+package manager.managers;
 
 import models.Epic;
 import models.Subtask;
 import models.Task;
-import models.TaskStatus;
+import models.enums.TaskStatus;
 
 import java.util.List;
 

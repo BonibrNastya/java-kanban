@@ -1,13 +1,12 @@
 package manager;
 
 import org.junit.jupiter.api.Test;
-import manager.TaskManager;
+import manager.managers.TaskManager;
 import models.Epic;
 import models.Subtask;
 import models.Task;
-import models.TaskStatus;
+import models.enums.TaskStatus;
 
-import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.*;
 

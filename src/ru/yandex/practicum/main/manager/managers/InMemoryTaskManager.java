@@ -1,9 +1,9 @@
-package manager;
+package manager.managers;
 
 import models.Epic;
 import models.Subtask;
 import models.Task;
-import models.TaskStatus;
+import models.enums.TaskStatus;
 
 import java.util.*;
 
@@ -21,13 +21,6 @@ public class InMemoryTaskManager implements TaskManager {
         this.historyManager = historyManager;
     }
 
-    public Map<Integer, Task> getTaskMap() {
-        return taskMap;
-    }
-
-    public HistoryManager getHistoryManager() {
-        return historyManager;
-    }
 
     static Comparator<Task> taskComparator = Comparator.comparing(Task::getStartTime,
                     Comparator.nullsLast(Comparator.naturalOrder()))

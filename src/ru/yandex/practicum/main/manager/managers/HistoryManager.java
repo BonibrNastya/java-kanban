@@ -1,4 +1,4 @@
-package manager;
+package manager.managers;
 
 import models.Task;
 

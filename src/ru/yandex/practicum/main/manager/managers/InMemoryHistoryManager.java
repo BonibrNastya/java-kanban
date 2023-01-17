@@ -1,5 +1,6 @@
-package manager;
+package manager.managers;
 
+import manager.managers.HistoryManager;
 import models.Node;
 import models.Task;
 
